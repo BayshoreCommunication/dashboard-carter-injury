@@ -4,5 +4,6 @@
   "/_document": "pages/_document.js",
   "/": "pages/index.js",
   "/categories": "pages/categories.js",
-  "/blog": "pages/blog.js"
+  "/blog": "pages/blog.js",
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js"
 }
