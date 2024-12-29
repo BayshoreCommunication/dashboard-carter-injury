@@ -1,29 +1,29 @@
-import { toast } from 'sonner';
-import Button from '../ui/Button';
+import { toast } from "sonner";
+import Button from "../ui/Button";
 
 function ConsoleButton() {
   const handleAuthClick = async () => {
     try {
-      const response = await fetch('/api/google/auth', {
-        method: 'POST',
+      const response = await fetch("/api/google/auth", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
-      console.log(response);
+      //console.log(response);
 
       if (response.ok) {
         const result = await response.json();
         // console.log("result", result);
         window.location.assign(result.url);
       } else {
-        toast.error('Authentication failed');
+        toast.error("Authentication failed");
         // setMessage("Authentication failed");
       }
     } catch (error) {
-      toast.error('Error during authentication');
-      console.error('Error during authentication:', error.message);
+      toast.error("Error during authentication");
+      console.error("Error during authentication:", error.message);
     }
   };
 

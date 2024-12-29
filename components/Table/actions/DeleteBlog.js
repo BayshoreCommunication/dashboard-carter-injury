@@ -24,7 +24,7 @@ function DeleteBlog({ blogInfo }) {
           setShowDeleteModal(false);
         },
         onError: () => {
-          console.log("onerror");
+          //console.log("onerror");
           setShowDeleteModal(false);
         },
       }

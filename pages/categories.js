@@ -7,7 +7,7 @@ import { categoriesColumn } from "@/components/Table/columns/categories-column";
 function CategoriesPage() {
   const { data: categoriesData, isPending } = useGetData({ path: "/category" });
 
-  console.log("categoriesData", categoriesData);
+  //console.log("categoriesData", categoriesData);
 
   return (
     <PageWrapper

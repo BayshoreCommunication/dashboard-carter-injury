@@ -1,12 +1,14 @@
-import Lottie from "lottie-react";
+"use client";
+// import Lottie from "lottie-react";
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Button from "@/components/ui/Button";
-import deleteLottie from "@/public/lottie/delete-lottie.json";
+// import deleteLottie from "@/public/lottie/delete-lottie.json";
 import { Spinner } from "@/components/Loading/Spinner";
+import { FaTrashCan } from "react-icons/fa6";
 
 function DeleteModal({
   showDeleteModal,
@@ -28,11 +30,14 @@ function DeleteModal({
         <div className=" flex flex-col items-center">
           <p className="text-lg font-medium">{title}</p>
 
-          <div className="mt-2 size-[116px]">
+          {/* <div className="mt-2 size-[116px]">
             <Lottie animationData={deleteLottie} />
+          </div> */}
+          <div className=" size-28  m-auto flex justify-center items-center rounded-full border-red-500 border p-2 my-6">
+            <FaTrashCan className="text-red-500 size-16 " />
           </div>
 
-          <div className="mt-4 flex justify-center gap-5">
+          <div className=" flex justify-center gap-5">
             <Button
               type="button"
               variant="outline"

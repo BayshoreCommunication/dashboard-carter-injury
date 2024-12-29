@@ -23,7 +23,7 @@ function CategoryForm() {
     // console.log("values", values);
     mutate(values, {
       onSuccess: () => {
-        console.log("onsuccess");
+        //console.log("onsuccess");
         toast.success(`Category ${values.name} added`);
         formik.resetForm();
       },

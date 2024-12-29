@@ -10,9 +10,11 @@ function ImageItem({ media, selectedId, handleImageClick }) {
       <Image
         src={media.image.url}
         alt={media.altText}
-        sizes="282px"
-        fill
-        className="object-cover  border border-gray-200 rounded-md"
+        width={1200}
+        height={1200}
+        objectFit="cover"
+        // fill
+        className="object-cover h-[282px] w-[282px] border border-gray-200 rounded-md"
       />
 
       {selectedId === media._id && (

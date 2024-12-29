@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import Image from "next/image";
 import { IconTick } from "@/components/Icons";
@@ -55,7 +56,7 @@ function ImageLibrary({ setShowImageModal, handleImageSubmit }) {
                         alt={media.altText}
                         fill
                         // sizes="150px"
-                        className="object-cover border border-gray-200 rounded-md"
+                        className="object-cover border  border-gray-200 rounded-md"
                       />
 
                       {selectedImage?._id === media._id && (

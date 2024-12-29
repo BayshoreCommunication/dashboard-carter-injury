@@ -44,7 +44,7 @@ function TextSelect({ editor }) {
         isActive: editor.isActive("heading", { level: 6 }),
       },
     ],
-    [editor.state.selection]
+    [editor]
   );
 
   useEffect(() => {
@@ -55,7 +55,7 @@ function TextSelect({ editor }) {
     editor.isActive("heading", { level: 4 }) && setSelectedOption("Heading 4");
     editor.isActive("heading", { level: 5 }) && setSelectedOption("Heading 5");
     editor.isActive("heading", { level: 6 }) && setSelectedOption("Heading 6");
-  }, [editor.state.selection]);
+  }, [editor]);
 
   return (
     <div ref={node} className="w-[130px] text-sm font-medium">

@@ -20,7 +20,7 @@ function Layout({ children }) {
     settingsData?.data.name && setUsername(settingsData.data.name);
     settingsData?.data.logo && setLogo(settingsData.data.logo);
     settingsData?.data.color && setTheme(settingsData.data.color);
-  }, [settingsData]);
+  }, [settingsData, setUsername, setLogo, setTheme]);
 
   if (pathname === "/sign-in") {
     return <>{children}</>;
