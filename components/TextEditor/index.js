@@ -79,7 +79,7 @@ const TextEditor = ({ value, setValue }) => {
     // to retrieve your editors content from somewhere
 
     editor?.commands.setContent(value);
-  }, [editor?.commands, value]);
+  }, [editor]);
 
   return (
     <div>
