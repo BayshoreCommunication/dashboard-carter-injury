@@ -1,17 +1,20 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
-import { toast } from "sonner";
-import useTheme from "@/hooks/useTheme";
 import { IconCloudArrow } from "@/components/Icons";
 import { Spinner } from "@/components/Loading/Spinner";
+import {
+  DIGITALOCEAN_API_KEY,
+  DIGITALOCEAN_ENDPOINT,
+  DIGITALOCEAN_FOLDER,
+  DIGITALOCEAN_SECRET_ACCESS_KEY,
+} from "@/config";
+import useTheme from "@/hooks/useTheme";
+import AWS from "aws-sdk";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 import ImageSubmitForm from "./ImageSubmitForm";
 import LogoSubmit from "./LogoSubmit";
-import {
-  CLOUDINARY_CLOUD_NAME,
-  CLOUDINARY_FOLDER,
-  CLOUDINARY_UPLOAD_PRESET,
-} from "@/config";
 
 function ImageUploadField({
   imageUploading,
@@ -22,12 +25,17 @@ function ImageUploadField({
   handleImageSubmit,
   imageSubmitting,
 }) {
+  const s3 = new AWS.S3({
+    endpoint: DIGITALOCEAN_ENDPOINT,
+    accessKeyId: DIGITALOCEAN_API_KEY,
+    secretAccessKey: DIGITALOCEAN_SECRET_ACCESS_KEY,
+  });
+
   const theme = useTheme();
 
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [dragging, setDragging] = useState(false);
-
   const [imageUrl, setImageUrl] = useState(null);
   const [imageId, setImageId] = useState(null);
 
@@ -36,66 +44,68 @@ function ImageUploadField({
   const handleImageUpload = useCallback(async () => {
     if (!image) return;
 
+    // Check image size
     if (image.size > imageMaxSize * 1024) {
-      //console.log("Image size exceeds the limit");
-      toast.error("Image size exceeds the limit");
+      toast.error(`Image size exceeds the limit of ${imageMaxSize}KB`);
       return;
     }
 
-    setImagePreview(URL.createObjectURL(image));
+    // Generate a unique filename
+    const uniqueFileName = `${DIGITALOCEAN_FOLDER}/${Date.now()}-${uuidv4()}-${encodeURIComponent(
+      image.name
+    )}`;
 
-    const formData = new FormData();
-    formData.append("file", image);
-    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-    formData.append("cloud_name", CLOUDINARY_CLOUD_NAME);
-    formData.append("folder", CLOUDINARY_FOLDER);
+    // Set upload parameters
+    const params = {
+      Bucket: "bayshore",
+      Key: uniqueFileName,
+      Body: image,
+      ACL: "public-read",
+      ContentType: image.type,
+    };
 
     setImageUploading(true);
 
-    const cloudinary_url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
-
     try {
-      const response = await fetch(cloudinary_url, {
-        method: "POST",
-        body: formData,
-      });
+      // Upload the image to DigitalOcean Spaces
+      const { Location } = await s3.upload(params).promise();
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setImageUrl(data.secure_url);
-        setImageId(data.public_id);
-        setImage(null);
-        setImageUploaded(true);
-      } else {
-        //console.log("error", data);
-        setImage(null);
-        setShowImageModal(false);
-        toast.error("Image upload failed, try again");
-      }
+      // Update state with the uploaded image URL and ID
+      setImageUrl(Location);
+      setImageId(uniqueFileName);
+      setImageUploaded(true);
+      toast.success("Image uploaded successfully!");
     } catch (error) {
-      //console.log("error", error);
-      setImage(null);
-      setShowImageModal(false);
-      toast.error("Image upload failed, try again");
+      console.error("Upload failed:", error);
+      toast.error("Image upload failed, please try again.");
+    } finally {
+      setImageUploading(false);
     }
+  }, [image, setImageUploading, setImageUploaded]);
 
-    setImageUploading(false);
-  }, [image, setShowImageModal, setImageUploading, setImageUploaded]);
+  // Trigger upload when image changes
   useEffect(() => {
-    image && handleImageUpload();
+    if (image) {
+      handleImageUpload();
+    }
   }, [image, handleImageUpload]);
 
-  const handleImageChange = async (e) => {
+  const handleImageChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
       return;
     }
 
-    e.preventDefault();
+    const selectedImage = e.target.files[0];
 
-    const image = e.target.files[0];
+    // Validate image size
+    if (selectedImage.size > imageMaxSize * 1024) {
+      toast.error(`Image size exceeds the limit of ${imageMaxSize}KB`);
+      return;
+    }
 
-    setImage(image);
+    // Set the image and preview
+    setImage(selectedImage);
+    setImagePreview(URL.createObjectURL(selectedImage));
   };
 
   const handleDragEnter = (e) => {
@@ -117,20 +127,21 @@ function ImageUploadField({
     setDragging(false);
 
     if (e.dataTransfer.files.length > 1) {
-      //console.log("single image only");
-      toast.error("Single image only");
+      toast.error("Only one image can be uploaded at a time.");
       return;
     }
 
     const droppedImage = e.dataTransfer.files[0];
 
+    // Validate image size
     if (droppedImage.size > imageMaxSize * 1024) {
-      //console.log("Image size exceeds the limit");
-      toast.error("Image size exceeds the limit");
+      toast.error(`Image size exceeds the limit of ${imageMaxSize}KB`);
       return;
     }
 
+    // Set the image and preview
     setImage(droppedImage);
+    setImagePreview(URL.createObjectURL(droppedImage));
   };
 
   return (
@@ -148,14 +159,12 @@ function ImageUploadField({
             <IconCloudArrow />
           </span>
           <p className="mt-5 text-xl font-medium">Drag and drop asset here</p>
-          <p className="mt-1 text-sm ">{`Image size ( Max ${imageMaxSize}kb)`}</p>
-
+          <p className="mt-1 text-sm">{`Image size (Max ${imageMaxSize}KB)`}</p>
           <p className="mt-3 font-medium text-black text-lg">Or</p>
 
           <input
             type="file"
             accept=".jpg, .jpeg, .png, .svg"
-            // accept="image/*"
             id="image"
             onChange={handleImageChange}
             className="hidden"
@@ -198,7 +207,7 @@ function ImageUploadField({
 
                 {!isLogo ? (
                   <div className="absolute inset-0 flex justify-center items-center h-full">
-                    <div className=" w-[330px] px-7 py-5 bg-white rounded-lg">
+                    <div className="w-[330px] px-7 py-5 bg-white rounded-lg">
                       <ImageSubmitForm
                         imageId={imageId}
                         imageUrl={imageUrl}
