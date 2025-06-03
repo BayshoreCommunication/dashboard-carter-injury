@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/custom/button";
+import { Button } from "@/components/custom/Button";
 import { LoadingSpinner } from "@/components/Loading/LoadingSpinner";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
