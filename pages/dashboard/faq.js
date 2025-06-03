@@ -267,6 +267,7 @@ export default function FAQPage() {
                         <Switch
                             checked={isEnabled}
                             onCheckedChange={setIsEnabled}
+                            className="data-[state=checked]:bg-black data-[state=checked]:border-black data-[state=checked]:ring-black data-[state=checked]:ring-offset-black [&>span]:data-[state=checked]:bg-white"
                         />
                     </div>
                 </div>
@@ -304,7 +305,7 @@ export default function FAQPage() {
                                             <Switch
                                                 checked={faq.is_active}
                                                 onCheckedChange={() => toggleFaqActive(faq.id)}
-                                                className="mr-2"
+                                                className="mr-2 data-[state=checked]:bg-black data-[state=checked]:border-black data-[state=checked]:ring-black data-[state=checked]:ring-offset-black [&>span]:data-[state=checked]:bg-white"
                                             />
                                             <button
                                                 onClick={(e) => {
@@ -367,7 +368,7 @@ export default function FAQPage() {
                                                     id={`persistent-menu-${faq.id}`}
                                                     checked={faq.persistent_menu}
                                                     onCheckedChange={() => togglePersistentMenu(faq.id)}
-                                                    className="mr-3"
+                                                    className="mr-3 data-[state=checked]:bg-black data-[state=checked]:border-black data-[state=checked]:ring-black data-[state=checked]:ring-offset-black [&>span]:data-[state=checked]:bg-white"
                                                 />
                                                 <div>
                                                     <Label htmlFor={`persistent-menu-${faq.id}`} className="font-medium">Add this question to persistent menu</Label>

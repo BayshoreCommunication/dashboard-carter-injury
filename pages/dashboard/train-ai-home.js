@@ -190,9 +190,9 @@ export default function TrainAiHome() {
                                         <td className="py-2">
                                             <span className={`px-2 py-1 rounded-full text-xs ${automation.status
                                                 ? 'bg-green-100 text-green-800'
-                                                : 'bg-yellow-100 text-yellow-800'
+                                                : ' bg-green-100 text-green-800'
                                                 }`}>
-                                                {automation.status ? 'Active' : 'Inactive'}
+                                                {automation.status ? 'Active' : 'Active'}
                                             </span>
                                         </td>
                                         <td className="py-2 text-gray-500">
