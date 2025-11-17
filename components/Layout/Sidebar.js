@@ -1,13 +1,11 @@
-import { useRouter } from "next/router";
-import Link from "next/link";
-import Image from "next/image";
-import { IconLogout } from "../Icons/IconLogout";
-import { IconChatbot } from "../Icons/IconChatbot";
-import { IconTrainAI } from "../Icons/IconTrainAI";
-import { useSiteInfo } from "@/lib/store";
-import useTheme from "@/hooks/useTheme";
-import useSignout from "@/hooks/useSignout";
 import useLogo from "@/hooks/useLogo";
+import useSignout from "@/hooks/useSignout";
+import useTheme from "@/hooks/useTheme";
+import { useSiteInfo } from "@/lib/store";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { IconLogout } from "../Icons/IconLogout";
 
 function Sidebar({ navLinks }) {
   const router = useRouter();
@@ -62,21 +60,6 @@ function Sidebar({ navLinks }) {
     };
   };
 
-  // Add chatbot and train AI to navigation links
-  const allNavLinks = [
-    ...navLinks,
-    {
-      name: "Chatbot",
-      link: "/chatbot",
-      icon: <IconChatbot />,
-    },
-    {
-      name: "Train AI",
-      link: "/dashboard/train-ai-home",
-      icon: <IconTrainAI />,
-    },
-  ];
-
   return (
     <div className="sidebar h-screen overflow-y-auto bg-white z-30 top-0 bottom-0 sticky border-r border-gray-400 w-[260px]">
       <div className="mb-5">
@@ -98,7 +81,7 @@ function Sidebar({ navLinks }) {
         </div>
 
         <div className="mt-12 mx-[47px] space-y-5 text-[17px]">
-          {allNavLinks?.map((navLink, i) => (
+          {navLinks?.map((navLink, i) => (
             <div key={i} className="w-[160px]">
               <Link href={navLink.link} passHref>
                 <div
