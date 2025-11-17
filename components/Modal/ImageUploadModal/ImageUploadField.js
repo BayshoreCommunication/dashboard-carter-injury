@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { toast } from "sonner";
-import useTheme from "@/hooks/useTheme";
 import { IconCloudArrow } from "@/components/Icons";
 import { Spinner } from "@/components/Loading/Spinner";
-import ImageSubmitForm from "./ImageSubmitForm";
-import LogoSubmit from "./LogoSubmit";
 import {
   CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_FOLDER,
   CLOUDINARY_UPLOAD_PRESET,
 } from "@/config";
+import useTheme from "@/hooks/useTheme";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import ImageSubmitForm from "./ImageSubmitForm";
+import LogoSubmit from "./LogoSubmit";
 
 function ImageUploadField({
   imageUploading,
@@ -37,7 +37,7 @@ function ImageUploadField({
 
     if (image.size > imageMaxSize * 1024) {
       console.log("Image size exceeds the limit");
-      toast.error("Image size exceeds the limit");
+      toast.error(`Image size must be less than ${imageMaxSize}kb`);
       return;
     }
 
@@ -95,6 +95,14 @@ function ImageUploadField({
 
     const image = e.target.files[0];
 
+    // Validate file size
+    if (image.size > imageMaxSize * 1024) {
+      console.log("Image size exceeds the limit");
+      toast.error(`Image size must be less than ${imageMaxSize}kb`);
+      e.target.value = null;
+      return;
+    }
+
     setImage(image);
   };
 
@@ -126,7 +134,7 @@ function ImageUploadField({
 
     if (droppedImage.size > imageMaxSize * 1024) {
       console.log("Image size exceeds the limit");
-      toast.error("Image size exceeds the limit");
+      toast.error(`Image size must be less than ${imageMaxSize}kb`);
       return;
     }
 
@@ -154,8 +162,7 @@ function ImageUploadField({
 
           <input
             type="file"
-            accept=".jpg, .jpeg, .png, .svg"
-            // accept="image/*"
+            accept="image/*"
             id="image"
             onChange={handleImageChange}
             className="hidden"

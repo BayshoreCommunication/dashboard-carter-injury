@@ -1,4 +1,4 @@
-import Lottie from "lottie-react";
+import { Spinner } from "@/components/Loading/Spinner";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -6,7 +6,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import Button from "@/components/ui/Button";
 import deleteLottie from "@/public/lottie/delete-lottie.json";
-import { Spinner } from "@/components/Loading/Spinner";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 function DeleteModal({
   showDeleteModal,
