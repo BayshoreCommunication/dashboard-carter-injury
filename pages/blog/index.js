@@ -1,3 +1,4 @@
+"use client";
 import useGetData from "@/hooks/useGetData";
 import PageWrapper from "@/components/Layout/PageWrapper";
 import Table from "@/components/Table";

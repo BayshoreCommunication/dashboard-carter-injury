@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
@@ -31,7 +32,7 @@ function useDeleteData({ path, revalidate }) {
       // console.log(data);
     },
     onError: (error) => {
-      console.log("error is", error.response.data);
+      // console.log("error is", error.response.data);
       toast.error("Something went wrong");
     },
   });

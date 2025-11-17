@@ -1,3 +1,4 @@
+"use client";
 import { Form, Formik } from "formik";
 import { toast } from "sonner";
 import usePostData from "@/hooks/usePostData";

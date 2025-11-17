@@ -16,11 +16,11 @@ function useSignin() {
         // console.log(response);
         router.push("/");
       } else if (response?.error) {
-        console.log("error response", response.error);
+        //console.log("error response", response.error);
         toast.error(response.error);
       }
     } catch (error) {
-      console.log("error auth", error);
+      //console.log("error auth", error);
       toast.error("Something went wrong");
     }
   };

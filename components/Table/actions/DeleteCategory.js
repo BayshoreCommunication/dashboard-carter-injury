@@ -24,7 +24,7 @@ function DeleteCategory({ categoryInfo }) {
           setShowDeleteModal(false);
         },
         onError: () => {
-          console.log("onerror");
+          //console.log("onerror");
           setShowDeleteModal(false);
         },
       }

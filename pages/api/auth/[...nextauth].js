@@ -26,7 +26,7 @@ export const authOptions = {
           // console.log("admin login", user);
           return user;
         } else {
-          console.log("error", user);
+          //console.log("error", user);
 
           throw new Error(user.error);
         }

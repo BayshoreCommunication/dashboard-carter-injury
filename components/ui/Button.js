@@ -24,6 +24,7 @@ function Button({
       style={{
         borderColor: theme,
         backgroundColor: variant === "outline" ? "transparent" : theme,
+
         color: variant === "outline" ? theme : "white",
       }}
       disabled={disabled}
